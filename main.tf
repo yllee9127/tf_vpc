@@ -30,6 +30,9 @@ module "vpc-2" {
   enable_dns_hostnames = true # needed for DNS resolution
 }
 
+locals {
+  name_prefix = "yl"
+}
 
 resource "aws_instance" "web_app_1" {
   #count = 2
@@ -39,10 +42,11 @@ resource "aws_instance" "web_app_1" {
   instance_type = "t2.micro"
   #for_each = toset(data.aws_subnets.public-1.ids)
   #subnet_id = each.value
-  subnet_id = data.aws_subnets.public-1.ids[0]
+  subnet_id = data.aws_subnets.public-1.ids[0] # this is working
+  #subnet_id = data.aws_subnets.public-"${var.index_count}".ids[0]
   #subnet_id = local.selected_subnet_ids[count.index % length(local.selected_subnet_ids)]
   vpc_security_group_ids = [aws_security_group.allow_tls_vpc_1.id]
-  # user_data = templatefile("init-script.sh")
+  user_data = templatefile("init-script.sh", {file_content = "webapp"})
 
   depends_on = [aws_security_group.allow_tls_vpc_1]
 
@@ -65,7 +69,7 @@ resource "aws_instance" "web_app_2" {
   subnet_id = data.aws_subnets.public-2.ids[0]
   #subnet_id = local.selected_subnet_ids[count.index % length(local.selected_subnet_ids)]
   vpc_security_group_ids = [aws_security_group.allow_tls_vpc_2.id]
-  # user_data = templatefile("init-script.sh")
+  user_data = templatefile("init-script.sh", {file_content = "webapp"})
 
   #key_name = "yl-key-pair"
   associate_public_ip_address = true
@@ -75,11 +79,6 @@ resource "aws_instance" "web_app_2" {
   tags = {
     Name = "${local.name_prefix}-ec2-2"
   }
-}
-
-
-locals {
-  name_prefix = "yl"
 }
 
 resource "aws_security_group" "allow_tls_vpc_1" {
