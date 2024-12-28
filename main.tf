@@ -37,9 +37,9 @@ resource "aws_instance" "web_app_1" {
   ami = "ami-04c913012f8977029"
   #instance_type = var.instance_type
   instance_type = "t2.micro"
-  for_each = toset(data.aws_subnets.public-1.ids)
-  subnet_id = each.value
-  #subnet_id = data.aws_subnets."public-${count.index+1}".ids[0]
+  #for_each = toset(data.aws_subnets.public-1.ids)
+  #subnet_id = each.value
+  subnet_id = data.aws_subnets.public-1.ids[0]
   #subnet_id = local.selected_subnet_ids[count.index % length(local.selected_subnet_ids)]
   vpc_security_group_ids = [aws_security_group.allow_tls_vpc_1.id]
   # user_data = templatefile("init-script.sh")
@@ -60,9 +60,9 @@ resource "aws_instance" "web_app_2" {
   ami = "ami-04c913012f8977029"
   #instance_type = var.instance_type
   instance_type = "t2.micro"
-  for_each = toset(data.aws_subnets.public-2.ids)
-  subnet_id = each.value
-  #subnet_id = data.aws_subnets."public-${count.index+1}".ids[0]
+  #for_each = toset(data.aws_subnets.public-2.ids)
+  #subnet_id = each.value
+  subnet_id = data.aws_subnets.public-2.ids[0]
   #subnet_id = local.selected_subnet_ids[count.index % length(local.selected_subnet_ids)]
   vpc_security_group_ids = [aws_security_group.allow_tls_vpc_2.id]
   # user_data = templatefile("init-script.sh")

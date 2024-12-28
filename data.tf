@@ -3,11 +3,11 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_subnets" "public-1" {
-  /*filter {
+  filter {
     name = "vpc-id"
     #values = [var.vpc_id]
-    values = module.vpc-1.vpc_id
-  }*/
+    values = [module.vpc-1.vpc_id]
+  }
 
   filter {
     name = "tag:Name"
@@ -16,11 +16,11 @@ data "aws_subnets" "public-1" {
 }
 
 data "aws_subnets" "public-2" {
-  /*filter {
+  filter {
     name = "vpc-id"
     # values = [var.vpc_id]
-    values = module.vpc-2.vpc_id
-  }*/
+    values = [module.vpc-2.vpc_id]
+  }
 
   filter {
     name = "tag:Name"
